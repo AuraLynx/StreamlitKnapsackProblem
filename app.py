@@ -30,6 +30,7 @@ def main():
         value=5.0, 
         step=1.0,
     )
+
     st.subheader('アイテム、容量、値段、最大容量の表(編集可)')
     edited_df = st.data_editor(data(), num_rows="dynamic")
 

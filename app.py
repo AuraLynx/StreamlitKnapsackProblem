@@ -12,9 +12,9 @@ def init_page() -> None:
 def data() -> pd.DataFrame:
     df = pd.DataFrame(
         [
-            {"item": '牛乳', "volume": 1, "value": 200, "max_items": 10},
-            {"item": "おにぎり", "volume": 1, "value": 200, "max_items": 10},
-            {"item": "サンドイッチ", "volume": 1, "value": 200, "max_items": 10},
+            {"item": '牛乳', "volume": 1, "value": 300, "max_items": 10},
+            {"item": "おにぎり", "volume": 0.25, "value": 100, "max_items": 10},
+            {"item": "サンドイッチ", "volume": 0.3, "value": 150, "max_items": 10},
         ]
     )
     return df
@@ -23,10 +23,6 @@ def data() -> pd.DataFrame:
 def main():
     init_page()
 
-    lt = ['牛乳', "おにぎり", "サンドイッチ"]
-    w = [1, 0.7, 0.5]
-    v = [200, 150, 120]
-    max_items = [10, 30, 2]
     W = st.number_input(
         "ナップザックの容量",
         min_value=1.0, 
@@ -34,7 +30,12 @@ def main():
         value=1.0, 
         step=1.0,
     )
+    st.subheader('アイテム、容量、値段、最大容量の表')
     edited_df = st.data_editor(data(), num_rows="dynamic")
+    lt = edited_df['item'].tolist()
+    w = edited_df['volume'].tolist()
+    v = edited_df['value'].tolist()
+    max_items = edited_df['max_items'].tolist()
 
     problem = pulp.LpProblem(sense=pulp.LpMaximize)
     x = [pulp.LpVariable(f"x{i}", lowBound=0, cat='Integer') for i in range(len(w))]
@@ -45,7 +46,7 @@ def main():
     for i in range(len(x)):
         problem += x[i] <= max_items[i]
 
-    if st.button("実行"):
+    if st.button("最適化計算実行"):
         status = problem.solve()
         st.write("状態", pulp.LpStatus[status])
         tmp = [xs.value() for xs in x]

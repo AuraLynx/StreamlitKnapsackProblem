@@ -14,7 +14,7 @@ def data() -> pd.DataFrame:
         [
             {"item": '牛乳', "volume": 1, "value": 300, "max_items": 10},
             {"item": "おにぎり", "volume": 0.25, "value": 100, "max_items": 10},
-            {"item": "サンドイッチ", "volume": 0.3, "value": 150, "max_items": 10},
+            {"item": "サンドイッチ", "volume": 0.5, "value": 150, "max_items": 10},
         ]
     )
     return df
@@ -27,7 +27,7 @@ def main():
         "ナップザックの容量",
         min_value=1.0, 
         max_value=50.0, 
-        value=1.0, 
+        value=5.0, 
         step=1.0,
     )
     st.subheader('アイテム、容量、値段、最大容量の表')
@@ -49,9 +49,19 @@ def main():
     if st.button("最適化計算実行"):
         status = problem.solve()
         st.write("状態", pulp.LpStatus[status])
+        result_df = pd.DataFrame(
+            columns=['item', 'count']
+        )
         tmp = [xs.value() for xs in x]
         for i, a in enumerate(tmp):
-            st.write(lt[i], a)
+            tmp_df = pd.DataFrame(
+                {
+                    'item': [lt[i]],
+                    'count': [a]
+                }
+            )
+            result_df = pd.concat([result_df, tmp_df], ignore_index=True)
+        st.dataframe(result_df)
         st.write("最大価値", problem.objective.value())
 
 

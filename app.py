@@ -32,6 +32,7 @@ def main():
     )
     st.subheader('アイテム、容量、値段、最大容量の表(編集可)')
     edited_df = st.data_editor(data(), num_rows="dynamic")
+
     if st.button("最適化計算実行"):
         lt = edited_df['item'].tolist()
         w = edited_df['volume'].tolist()

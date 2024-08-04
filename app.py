@@ -6,15 +6,15 @@ from pulp import LpProblem, LpVariable, LpMaximize, LpBinary, LpStatus
 
 
 def init_page() -> None:
-    st.title("ナップザック問題を解くGUI")
-    st.write("制約条件を書きましょう")
+    st.title("ナップザック問題を解く")
 
 def data() -> pd.DataFrame:
     df = pd.DataFrame(
         [
-            {"item": '牛乳', "volume": 1, "value": 300, "max_items": 10},
-            {"item": "おにぎり", "volume": 0.25, "value": 100, "max_items": 10},
-            {"item": "サンドイッチ", "volume": 0.5, "value": 150, "max_items": 10},
+            {"item": '牛乳', "volume": 1, "value": 200, "max_items": 1},
+            {"item": "おにぎり", "volume": 0.9, "value": 75, "max_items": 5},
+            {"item": "サンドイッチ", "volume": 1, "value": 150, "max_items": 2},
+            {"item": "麦茶", "volume": 0.5, "value": 90, "max_items": 3},
         ]
     )
     return df
@@ -26,7 +26,7 @@ def main():
     W = st.number_input(
         "ナップザックの容量",
         min_value=1.0, 
-        max_value=50.0, 
+        max_value=10.0, 
         value=5.0, 
         step=1.0,
     )

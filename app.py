@@ -32,21 +32,21 @@ def main():
     )
     st.subheader('アイテム、容量、値段、最大容量の表')
     edited_df = st.data_editor(data(), num_rows="dynamic")
-    lt = edited_df['item'].tolist()
-    w = edited_df['volume'].tolist()
-    v = edited_df['value'].tolist()
-    max_items = edited_df['max_items'].tolist()
-
-    problem = pulp.LpProblem(sense=pulp.LpMaximize)
-    x = [pulp.LpVariable(f"x{i}", lowBound=0, cat='Integer') for i in range(len(w))]
-
-    problem += pulp.lpDot(v, x)
-    problem += pulp.lpDot(w, x) <= W
-
-    for i in range(len(x)):
-        problem += x[i] <= max_items[i]
-
     if st.button("最適化計算実行"):
+        lt = edited_df['item'].tolist()
+        w = edited_df['volume'].tolist()
+        v = edited_df['value'].tolist()
+        max_items = edited_df['max_items'].tolist()
+
+        problem = pulp.LpProblem(sense=pulp.LpMaximize)
+        x = [pulp.LpVariable(f"x{i}", lowBound=0, cat='Integer') for i in range(len(w))]
+
+        problem += pulp.lpDot(v, x)
+        problem += pulp.lpDot(w, x) <= W
+
+        for i in range(len(x)):
+            problem += x[i] <= max_items[i]
+
         status = problem.solve()
         st.write("状態", pulp.LpStatus[status])
         result_df = pd.DataFrame(

@@ -1,5 +1,4 @@
 import streamlit as st
-import numpy as np
 import pandas as pd
 import pulp
 from pulp import LpProblem, LpVariable, LpMaximize, LpBinary, LpStatus
